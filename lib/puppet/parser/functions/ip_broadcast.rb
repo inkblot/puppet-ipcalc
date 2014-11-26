@@ -4,7 +4,7 @@ require 'ipaddr'
 module Puppet::Parser::Functions
   newfunction(:ip_broadcast, :type => :rvalue) do |args|
     cidr = args[0]
-    offset = args[1].to_i || 0
-    IPAddr.new(cidr).to_range.to_a[offset - 1]
+    offset = args[1] || '0'
+    IPAddr.new(cidr).to_range.to_a[offset.to_i - 1].to_s
   end
 end

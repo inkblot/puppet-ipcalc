@@ -1,0 +1,8 @@
+name	'inkblot/ipcalc'
+version '1.0.0'
+source	'git://github.com/inkblot/puppet-ipcalc'
+author	'inkblot'
+license	'Apache 2.0'
+summary 'IP, CIDR, netmask, network, and broadcast calculator functions'
+description 'A Puppet module which provides functions for performing IP address calculations, e.g. computation of netmasks, addresses, offset addresses, and subnet size from a CIDR address.'
+project_page 'https://github.com/inkblot/puppet-ipcalc'

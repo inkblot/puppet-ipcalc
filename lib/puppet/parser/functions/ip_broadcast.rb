@@ -5,6 +5,8 @@ module Puppet::Parser::Functions
   newfunction(:ip_broadcast, :type => :rvalue) do |args|
     cidr = args[0]
     offset = args[1] || '0'
-    IPAddr.new(cidr).to_range.to_a[offset.to_i - 1].to_s
+    (address, prefixlen) = cidr.split(/\//)
+    prefixlen ||= '32'
+    "#{IPAddr.new(cidr).to_range.to_a[offset.to_i - 1].to_s}/#{prefixlen}"
   end
 end

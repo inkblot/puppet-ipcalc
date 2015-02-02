@@ -3,8 +3,6 @@ require 'ipaddr'
 
 module Puppet::Parser::Functions
   newfunction(:ip_prefixlength, :type => :rvalue) do |args|
-    cidr = args[0]
-    (address, prefixlen) = cidr.split(/\//)
-    prefixlen || (IPAddr.new(address).ipv4? ? '32' : '128')
+    PuppetX::Ip.new(args[0]).prefixlength
   end
 end

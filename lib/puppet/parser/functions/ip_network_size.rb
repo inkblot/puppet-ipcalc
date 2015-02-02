@@ -1,9 +1,8 @@
 # ex: syntax=ruby ts=2 sw=2 si et
-require 'ipaddr'
+require 'puppetx/ip'
 
 module Puppet::Parser::Functions
   newfunction(:ip_network_size, :type => :rvalue) do |args|
-    cidr = args[0]
-    IPAddr.new(cidr).to_range.count
+    PuppetX::Ip.new(args[0]).network_size
   end
 end

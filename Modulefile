@@ -1,5 +1,5 @@
 name	'inkblot/ipcalc'
-version '1.2.1'
+version '1.2.2'
 source	'git://github.com/inkblot/puppet-ipcalc'
 author	'inkblot'
 license	'Apache 2.0'

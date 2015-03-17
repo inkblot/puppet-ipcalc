@@ -23,9 +23,9 @@ These are the functions available in this module:
 
 ip_address takes an IP/CIDR and returns just the IP address.
 
-### `ip_prefixlen($cidr)`
+### `ip_prefixlength($cidr)`
 
-ip_prefixlen takes an IP/CIDR and returns just the prefix length.
+ip_prefixlength takes an IP/CIDR and returns just the prefix length.
 
 ### `ip_netmask($cidr)`
 

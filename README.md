@@ -12,8 +12,8 @@ necessary to use any of its features.
 
 ## Conventions
 
-This documentation refers to an IP address suffixed with a CIDR prefix length
-as an IP/CIDR.
+This documentation refers to an IP address suffixed, with either a CIDR prefix
+length or a netmask, as an IP/CIDR.
 
 ## Usage
 

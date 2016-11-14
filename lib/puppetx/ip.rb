@@ -9,9 +9,19 @@ class PuppetX::Ip
 
   def initialize(cidr)
     @cidr = IPAddr.new(cidr)
-    (addr, prefixlen) = cidr.split(/\//)
+    (addr, mask) = cidr.split(/\//)
     @address = IPAddr.new(addr)
-    prefixlen ||= unicast_prefixlength
+    if mask.nil?
+      prefixlen = unicast_prefixlength
+    elsif mask =~ /\A\d+\z/
+      prefixlen = mask.to_i
+    else
+      m = IPAddr.new(mask)
+      if m.family != @address.family
+        raise ArgumentError, "address family is not same"
+      end
+      prefixlen = m.to_i.to_s(2).count('1')
+    end
     @prefixlength = prefixlen.to_i
   end
 

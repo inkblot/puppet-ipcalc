@@ -12,8 +12,14 @@ necessary to use any of its features.
 
 ## Conventions
 
-This documentation refers to an IP address suffixed, with either a CIDR prefix
-length or a netmask, as an IP/CIDR.
+The functions in this module generally operate on strings that are constructed
+from an IP address and either a subnet mask or a prefix length. Throughout the
+documentation, strings in this format are refered to as an IP/CIDR. The suffix
+supplies information about the address's subnet context. The following are
+equivalent:
+
+* 198.51.100.5/24
+* 198.51.100.5/255.255.255.0
 
 ## Usage
 

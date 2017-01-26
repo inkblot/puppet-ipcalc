@@ -39,8 +39,8 @@ class PuppetX::Ip
   end
 
   def broadcast(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset > network_size
-    "#{range.to_a[offset - 1].to_s}/#{prefixlength}"
+    raise ArgumentError, 'offset out of bounds' if offset > network_size - 1
+    "#{range.to_a[-1 - offset].to_s}/#{prefixlength}"
   end
 
   def offset

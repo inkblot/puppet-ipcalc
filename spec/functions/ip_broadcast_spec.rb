@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe 'ip_broadcast' do
     it { should run.with_params('10.0.0.1/24').and_return('10.0.0.255/24') }
-    it { should run.with_params('10.0.0.1/24',2).and_return('10.0.0.254/24') }
-    it { should run.with_params('10.0.0.1/24',999).and_raise_error(ArgumentError) }
+    it { should run.with_params('10.0.0.1/24',2).and_return('10.0.0.253/24') }
+    it { should run.with_params('10.0.0.1/24',255).and_return('10.0.0.0/24') }
+    it { should run.with_params('10.0.0.1/24',256).and_raise_error(ArgumentError) }
     it { should run.with_params('10.0.0.1/24',999).and_raise_error(ArgumentError) }
     it { should run.with_params('10.0.0.1/255.255.255.256').and_raise_error(IPAddr::InvalidAddressError) }
     it { should run.with_params('10.0.0.1/33').and_raise_error(IPAddr::InvalidPrefixError) }

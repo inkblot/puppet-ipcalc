@@ -9,5 +9,10 @@ describe 'ip_network' do
     it { should run.with_params('10.0.0.1/255.255.255.256').and_raise_error(IPAddr::InvalidAddressError) }
     it { should run.with_params('10.0.0.1/33').and_raise_error(IPAddr::InvalidPrefixError) }
     it { should run.with_params('999.999.999.999/32').and_raise_error(IPAddr::InvalidAddressError) }
+    it { should run.with_params('fd00::1/120').and_return('fd00::/120') }
+    it { should run.with_params('fd00::1/120',2).and_return('fd00::2/120') }
+    it { should run.with_params('fd00::1/120',255).and_return('fd00::ff/120') }
+    it { should run.with_params('fd00::1/120',256).and_raise_error(ArgumentError) }
+    it { should run.with_params('fd00::1/129').and_raise_error(ArgumentError) }
 end
 

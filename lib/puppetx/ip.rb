@@ -34,7 +34,7 @@ class PuppetX::Ip
   end
 
   def network(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset > network_size
+    raise ArgumentError, 'offset out of bounds' if offset > network_size - 1
     "#{range.to_a[offset].to_s}/#{prefixlength}"
   end
 

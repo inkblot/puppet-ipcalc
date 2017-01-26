@@ -43,6 +43,12 @@ class PuppetX::Ip
     "#{range.to_a[offset - 1].to_s}/#{prefixlength}"
   end
 
+  def increment(offset = 1)
+    absolute_offset=self.offset + offset
+    raise ArgumentError, 'increment out of bounds' if absolute_offset > network_size
+    "#{range.to_a[absolute_offset].to_s}/#{prefixlength}"
+  end
+
   def offset
     range.to_a.index(address)
   end

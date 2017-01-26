@@ -60,6 +60,14 @@ IP/CIDR. The maximum reasonable value for offset is one less than the size of
 the subnet containing the supplied IP/CIDR but the function will probably
 accept large values.
 
+### `ip_increment($cidr, $offset)`
+
+ip_increment takes two arguments. The first is an IP/CIDR which is required.
+The second is an optional numerical increment which defaults to 1. The function
+returns an IP/CIDR with the distance of `$offset` from the given IP/CIDR.
+
+Example: `ip_increment('10.0.0.254/23',2)` will return `'10.0.1.0/23'`
+
 ### `ip_network_size($cidr)`
 
 ip_network_size takes an IP/CIDR and returns the number of IP addresses

@@ -52,6 +52,7 @@ class PuppetX::Ip
   end
 
   def subnet(subnet_prefixlength, index)
+    raise IPAddr::InvalidPrefixError, 'invalid subnet prefix' if subnet_prefixlength > unicast_prefixlength
     raise ArgumentError, 'subnet prefix too long' if subnet_prefixlength <= prefixlength
     subnet_size = 2 ** (unicast_prefixlength - subnet_prefixlength)
     raise ArgumentError, 'subnet index out of bounds' if (subnet_size * index) >= network_size

@@ -60,7 +60,9 @@ class PuppetX::Ip
   end
 
   def supernet(supernet_prefixlength)
+    raise IPAddr::InvalidPrefixError, 'invalid supernet prefix' if supernet_prefixlength > unicast_prefixlength
     raise ArgumentError, 'supernet prefix too short' if supernet_prefixlength < 0
+    raise ArgumentError, 'supernet prefix too long' if supernet_prefixlength > prefixlength
     "#{cidr.mask(supernet_prefixlength)}/#{supernet_prefixlength}"
   end
 

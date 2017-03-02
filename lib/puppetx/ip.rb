@@ -34,13 +34,13 @@ class PuppetX::Ip
   end
 
   def network(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset > network_size
+    raise ArgumentError, 'offset out of bounds' if offset > network_size - 1
     "#{range.to_a[offset].to_s}/#{prefixlength}"
   end
 
   def broadcast(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset > network_size
-    "#{range.to_a[offset - 1].to_s}/#{prefixlength}"
+    raise ArgumentError, 'offset out of bounds' if offset > network_size - 1
+    "#{range.to_a[-1 - offset].to_s}/#{prefixlength}"
   end
 
   def offset
@@ -52,6 +52,7 @@ class PuppetX::Ip
   end
 
   def subnet(subnet_prefixlength, index)
+    raise IPAddr::InvalidPrefixError, 'invalid subnet prefix' if subnet_prefixlength > unicast_prefixlength
     raise ArgumentError, 'subnet prefix too long' if subnet_prefixlength <= prefixlength
     subnet_size = 2 ** (unicast_prefixlength - subnet_prefixlength)
     raise ArgumentError, 'subnet index out of bounds' if (subnet_size * index) >= network_size
@@ -59,7 +60,9 @@ class PuppetX::Ip
   end
 
   def supernet(supernet_prefixlength)
+    raise IPAddr::InvalidPrefixError, 'invalid supernet prefix' if supernet_prefixlength > unicast_prefixlength
     raise ArgumentError, 'supernet prefix too short' if supernet_prefixlength < 0
+    raise ArgumentError, 'supernet prefix too long' if supernet_prefixlength > prefixlength
     "#{cidr.mask(supernet_prefixlength)}/#{supernet_prefixlength}"
   end
 

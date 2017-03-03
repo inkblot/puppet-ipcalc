@@ -30,27 +30,24 @@ class PuppetX::Ip
   end
 
   def network_size
-    range.count
+    2 ** (unicast_prefixlength - prefixlength)
   end
 
   def network(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset > network_size - 1
-    "#{range.to_a[offset].to_s}/#{prefixlength}"
+    raise ArgumentError, 'offset out of bounds' if offset >= network_size or offset < 0
+    "#{IPAddr.new(cidr.to_i + offset, cidr.family).to_s}/#{prefixlength}"
   end
 
   def broadcast(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset > network_size - 1
-    "#{range.to_a[-1 - offset].to_s}/#{prefixlength}"
+    network(network_size - (offset + 1))
   end
 
   def increment(offset = 1)
-    absolute_offset=self.offset + offset
-    raise ArgumentError, 'increment out of bounds' if absolute_offset > network_size - 1
-    "#{range.to_a[absolute_offset].to_s}/#{prefixlength}"
+    network(self.offset + offset)
   end
 
   def offset
-    range.to_a.index(address)
+    address.to_i - cidr.to_i
   end
 
   def split
@@ -62,7 +59,7 @@ class PuppetX::Ip
     raise ArgumentError, 'subnet prefix too long' if subnet_prefixlength <= prefixlength
     subnet_size = 2 ** (unicast_prefixlength - subnet_prefixlength)
     raise ArgumentError, 'subnet index out of bounds' if (subnet_size * index) >= network_size
-    "#{range.to_a[subnet_size * index]}/#{subnet_prefixlength}"
+    "#{IPAddr.new(cidr.to_i + subnet_size * index, cidr.family).to_s}/#{subnet_prefixlength}"
   end
 
   def supernet(supernet_prefixlength)
@@ -78,15 +75,21 @@ class PuppetX::Ip
 
 private
 
-  def range
-    cidr.to_range
-  end
-
   def unicast_prefixlength
-    address.ipv4? ? 32 : 128
+    case address.family
+    when Socket::AF_INET
+      32
+    when Socket::AF_INET6
+      128
+    end
   end
 
   def unicast_netmask
-    address.ipv4? ? '255.255.255.255' : 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'
+    case address.family
+    when Socket::AF_INET
+      '255.255.255.255'
+    when Socket::AF_INET6
+      'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'
+    end
   end
 end

@@ -1,6 +1,6 @@
 {
   "name": "inkblot-ipcalc",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "author": "inkblot",
   "summary": "IP and subnet puppet parser functions",
   "license": "Apache-2.0",

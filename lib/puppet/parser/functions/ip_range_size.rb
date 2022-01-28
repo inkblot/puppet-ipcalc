@@ -1,4 +1,6 @@
 # ex: syntax=ruby ts=2 sw=2 si et
+# frozen_string_literal: true
+
 begin
   require 'puppetx/ip'
 rescue LoadError
@@ -8,7 +10,7 @@ rescue LoadError
 end
 
 module Puppet::Parser::Functions
-  newfunction(:ip_supernet, type: :rvalue) do |args|
-    PuppetX::Ip.new(args[0]).supernet(args[1].to_i)
+  newfunction(:ip_range_size, type: :rvalue) do |args|
+    PuppetX::Ip.new(args[0]).range_size(args[1]).to_i
   end
 end

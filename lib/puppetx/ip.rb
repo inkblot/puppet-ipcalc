@@ -4,21 +4,20 @@ require 'ipaddr'
 module PuppetX; end
 
 class PuppetX::Ip
-
   attr_reader :cidr, :address, :prefixlength
 
   def initialize(cidr)
     @cidr = IPAddr.new(cidr)
-    (addr, mask) = cidr.split(/\//)
+    (addr, mask) = cidr.split(%r{/})
     @address = IPAddr.new(addr)
     if mask.nil?
       prefixlen = unicast_prefixlength
-    elsif mask =~ /\A\d+\z/
+    elsif %r{\A\d+\z}.match?(mask)
       prefixlen = mask.to_i
     else
       m = IPAddr.new(mask)
       if m.family != @address.family
-        raise ArgumentError, "address family is not same"
+        raise ArgumentError, 'address family is not same'
       end
       prefixlen = m.to_i.to_s(2).count('1')
     end
@@ -30,12 +29,12 @@ class PuppetX::Ip
   end
 
   def network_size
-    2 ** (unicast_prefixlength - prefixlength)
+    2**(unicast_prefixlength - prefixlength)
   end
 
   def network(offset = 0)
-    raise ArgumentError, 'offset out of bounds' if offset >= network_size or offset < 0
-    "#{IPAddr.new(cidr.to_i + offset, cidr.family).to_s}/#{prefixlength}"
+    raise ArgumentError, 'offset out of bounds' if (offset >= network_size) || (offset < 0)
+    "#{IPAddr.new(cidr.to_i + offset, cidr.family)}/#{prefixlength}"
   end
 
   def broadcast(offset = 0)
@@ -50,6 +49,15 @@ class PuppetX::Ip
     address.to_i - cidr.to_i
   end
 
+  def range_size(range_cidr)
+    other_address = IPAddr.new(range_cidr.split(%r{/})[0])
+    raise ArgumentError, 'Both addresses must be in same family' if other_address.family != address.family
+
+    # Range size should be inclusive of starting and ending addresses, hence +1
+    range_subtraction = other_address.to_i - address.to_i
+    range_subtraction.abs + 1
+  end
+
   def split
     [ subnet(prefixlength + 1, 0), subnet(prefixlength + 1, 1) ]
   end
@@ -57,9 +65,9 @@ class PuppetX::Ip
   def subnet(subnet_prefixlength, index)
     raise IPAddr::InvalidPrefixError, 'invalid subnet prefix' if subnet_prefixlength > unicast_prefixlength
     raise ArgumentError, 'subnet prefix too long' if subnet_prefixlength <= prefixlength
-    subnet_size = 2 ** (unicast_prefixlength - subnet_prefixlength)
+    subnet_size = 2**(unicast_prefixlength - subnet_prefixlength)
     raise ArgumentError, 'subnet index out of bounds' if (subnet_size * index) >= network_size
-    "#{IPAddr.new(cidr.to_i + subnet_size * index, cidr.family).to_s}/#{subnet_prefixlength}"
+    "#{IPAddr.new(cidr.to_i + subnet_size * index, cidr.family)}/#{subnet_prefixlength}"
   end
 
   def supernet(supernet_prefixlength)
@@ -73,7 +81,16 @@ class PuppetX::Ip
     address.to_s
   end
 
-private
+  def family
+    case address.family
+    when Socket::AF_INET
+      'IPv4'
+    when Socket::AF_INET6
+      'IPv6'
+    end
+  end
+
+  private
 
   def unicast_prefixlength
     case address.family

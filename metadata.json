@@ -1,12 +1,78 @@
 {
-  "name": "inkblot/ipcalc",
-  "version": "2.2.0",
+  "name": "inkblot-ipcalc",
+  "version": "2.3.0",
   "author": "inkblot",
-  "license": "Apache-2.0",
   "summary": "IP and subnet puppet parser functions",
+  "license": "Apache-2.0",
   "source": "git://github.com/inkblot/puppet-ipcalc.git",
   "project_page": "https://github.com/inkblot/puppet-ipcalc",
   "issues_url": "https://github.com/inkblot/puppet-ipcalc/issues",
-  "tags": [ "ip", "address", "netmask", "cidr", "ipcalc" ],
-  "dependencies": []
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "windows",
+      "operatingsystemrelease": [
+        "2019",
+        "10"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.0.0 < 8.0.0"
+    }
+  ],
+  "tags": [
+    "ip",
+    "address",
+    "netmask",
+    "cidr",
+    "ipcalc"
+  ],
+  "pdk-version": "2.2.0",
+  "template-url": "pdk-default#2.2.0",
+  "template-ref": "tags/2.2.0-0-g2381db6"
 }

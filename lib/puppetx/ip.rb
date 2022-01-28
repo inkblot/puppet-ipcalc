@@ -49,6 +49,15 @@ class PuppetX::Ip
     address.to_i - cidr.to_i
   end
 
+  def range_size(range_cidr)
+    other_address = IPAddr.new(range_cidr.split(%r{/})[0])
+    raise ArgumentError, 'Both addresses must be in same family' if other_address.family != address.family
+
+    # Range size should be inclusive of starting and ending addresses, hence +1
+    range_subtraction = other_address.to_i - address.to_i
+    range_subtraction.abs + 1
+  end
+
   def split
     [ subnet(prefixlength + 1, 0), subnet(prefixlength + 1, 1) ]
   end
@@ -70,6 +79,15 @@ class PuppetX::Ip
 
   def to_s
     address.to_s
+  end
+
+  def family
+    case address.family
+    when Socket::AF_INET
+      'IPv4'
+    when Socket::AF_INET6
+      'IPv6'
+    end
   end
 
   private
